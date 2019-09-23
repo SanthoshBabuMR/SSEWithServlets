@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'com.babusa.learn'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+def warFileName = "app-21"
+def tomcatDirectory = "$System.env.CATALINA_HOME"
+
+war {
+    archiveName = "${warFileName}.war"
+}
+
+task deleteWar (dependsOn: war) {
+    delete {
+        "${tomcatDirectory}\\webapps\\${warFileName}"
+        "${tomcatDirectory}\\webapps\\${warFileName}.war"
+    }
+}
+
+task copyWar(dependsOn: deleteWar) {
+    copy {
+        from "build/libs"
+        into "${tomcatDirectory}\\webapps"
+        include "*.war"
+    }
+}
+
+task deploy (dependsOn: copyWar){}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9.3'
+
+}

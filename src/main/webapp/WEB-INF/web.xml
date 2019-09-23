@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>UserProfilePrompt</servlet-name>
+        <servlet-class>com.babusa.learn.UserProfilePrompt</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserProfileHandler</servlet-name>
+        <servlet-class>com.babusa.learn.UserProfileHandler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserProfile</servlet-name>
+        <servlet-class>com.babusa.learn.UserProfile</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SSE</servlet-name>
+        <servlet-class>com.babusa.learn.ServerPush</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EventPage</servlet-name>
+        <servlet-class>com.babusa.learn.EventPage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EventGen</servlet-name>
+        <servlet-class>com.babusa.learn.GenerateEvent</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UserProfilePrompt</servlet-name>
+        <url-pattern>/userprofileprompt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserProfileHandler</servlet-name>
+        <url-pattern>/userprofilehandler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserProfile</servlet-name>
+        <url-pattern>/userprofile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SSE</servlet-name>
+        <url-pattern>/sse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EventPage</servlet-name>
+            <url-pattern>/event-page</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EventGen</servlet-name>
+        <url-pattern>/event-gen</url-pattern>
+    </servlet-mapping>
+</web-app>
