@@ -1,6 +1,6 @@
 package com.babusa.learn;
 
-import com.babusa.learn.domain.EventStream;
+import com.babusa.learn.domain.EventStreamMessage;
 import com.babusa.learn.domain.Profile;
 
 import javax.servlet.ServletException;
@@ -18,10 +18,10 @@ public class GenerateEvent extends HttpServlet {
         String index = req.getParameter("index");
         if (index == null) { index = ""; }
         Profile profile = new Profile(index + " babu", new String[]{"trekking", "volley ball", "singing"});
-        EventStream es = new EventStream("FASTLOAD_VALIDATION", profile);
+        EventStreamMessage es = new EventStreamMessage("FASTLOAD_VALIDATION", profile);
         System.out.println("push into queue - gen event");
         ServerEventDataQueue.push(es);
-        res.getWriter().append("Event Generated");
+        res.getWriter().append("Event Generated::"+index);
     }
 }
 

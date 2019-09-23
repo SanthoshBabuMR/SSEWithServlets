@@ -1,7 +1,6 @@
 package com.babusa.learn;
 
-import com.babusa.learn.domain.EventStream;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.babusa.learn.domain.EventStreamMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -27,36 +26,47 @@ public class ServerPush extends HttpServlet {
         PrintWriter writer = response.getWriter();
 
         ObjectMapper json = new ObjectMapper();
+        Iterator<EventStreamMessage> eventQueueIterator;
+        List<EventStreamMessage> messages;
+        boolean hasMessagesToPush = false;
 
         while(true) {
-            List<EventStream> eventQueue = ServerEventDataQueue.get();
+            System.out.println(">> Do we have jobs to process?");
+            messages = ServerEventDataQueue.get();
+            hasMessagesToPush = messages.size() > 0;
 
-            int count = eventQueue.size();
-            System.out.println("start size: " + eventQueue.size());
-            if (count == 0) {
+            if (hasMessagesToPush) {
+                System.out.println("++ Yep. Awaken to start processing eventQueue");
+                synchronized (messages) {
+                    eventQueueIterator = messages.iterator();
+                    while (eventQueueIterator.hasNext()) {
+                        EventStreamMessage eQueue = eventQueueIterator.next();
+                        writer.write("event: " + eQueue.getEventType() + "\n");
+                        writer.write("data: " + json.writeValueAsString(eQueue.getData()) + "\n\n");
+                        eventQueueIterator.remove();
+                    }
+                    writer.flush();
+                }
+//              response.flushBuffer();
                 try {
+                    System.out.println("Good Job!! Take some rest :)");
+                    System.out.println("");
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                writer.close();
+            }
+            else {
+                System.out.println("-- Nope.");
+                try {
+                    System.out.println("Go sleep until needed.");
+                    System.out.println("");
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-
-            Iterator<EventStream> eventQueueIterator = eventQueue.iterator();
-            while (eventQueueIterator.hasNext()) {
-                EventStream eQueue = eventQueueIterator.next();
-                writer.write("event: " + eQueue.getEventType() + "\n");
-                writer.write("data: " + json.writeValueAsString(eQueue.getData()) + "\n\n");
-                eventQueueIterator.remove();
-            }
-
-            writer.flush();
-
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            writer.close();
         }
     }
 

@@ -29,7 +29,7 @@ function generateEvent() {
           return res.text();
     })
     .then((data) => {
-         console.log(data);
+         console.info(data);
     });
 }
 
